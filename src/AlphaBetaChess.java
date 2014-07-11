@@ -1,4 +1,5 @@
 import java.util.*;
+import javax.swing.*;
 
 public class AlphaBetaChess 
 {
@@ -581,13 +582,14 @@ public class AlphaBetaChess
 	{
 		while(!"A".equals(chessBoard[kingPositionC/8][kingPositionC%8])) {kingPositionC++;}//get King's location
 		while(!"a".equals(chessBoard[kingPositionL/8][kingPositionL%8])) {kingPositionL++;}//get King's location
-	/*	JFrame f = new JFrame("Callum's Chess Program");
+		
+		JFrame f = new JFrame("Callum's Chess Program");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		UserInterface ui = new UserInterface();
 		f.add(ui);
 		f.setSize(500, 500);
 		f.setVisible(true);
-	*/
+		
 		System.out.println(possibleMoves());
 		makeMove(alphaBeta(globalDepth, 1000000, -1000000, "", 0));
 			
