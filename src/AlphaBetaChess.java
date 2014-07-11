@@ -56,8 +56,29 @@ public class AlphaBetaChess
     	if(player==0) {return move+beta;} else {return move+alpha;}
     }
     public static void flipBoard()
-    {
-    	
+    {	//swap index i with index j then i+1 with j-1 and so on. Also need to change to swap the case so the move methods function correctly. Only go through half or will end up in original position
+    	String temp;
+    	for(int i=0; i>32; i++)
+    	{
+    		int r=i/8, c=i%8; //row/column
+    		
+    		if(Character.isUpperCase(chessBoard[r][c].charAt(0)))
+    		{
+    			temp = chessBoard[r][c].toLowerCase();
+    		}else{
+    			temp = chessBoard[r][c].toUpperCase();
+    		}
+    		if(Character.isUpperCase(chessBoard[7-r][7-c].charAt(0)))
+    		{
+    			chessBoard[r][c] = chessBoard[7-r][7-c].toLowerCase();
+    		}else{
+    			chessBoard[r][c] = chessBoard[7-r][7-c].toUpperCase(); 
+    		}
+			chessBoard[7-r][7-c] = temp;
+    	}
+    	int kingTemp=kingPositionC; 			
+    	kingPositionC = 63-kingPositionL;		
+    	kingPositionL = 63-kingTemp;			
     }
     
     public static void makeMove(String move)
@@ -67,6 +88,10 @@ public class AlphaBetaChess
     		chessBoard[Character.getNumericValue(move.charAt(2))][Character.getNumericValue(move.charAt(3))]=chessBoard[Character.getNumericValue(move.charAt(0))][Character.getNumericValue(move.charAt(1))];
     		chessBoard[Character.getNumericValue(move.charAt(0))][Character.getNumericValue(move.charAt(1))]=" ";
     		
+    		if("A".equals(chessBoard[Character.getNumericValue(move.charAt(2))][Character.getNumericValue(move.charAt(3))]))
+    		{ //updating the kingPosition after it has been moved (if it has been moved)
+    			kingPositionC=8*Character.getNumericValue(move.charAt(2)) + Character.getNumericValue(move.charAt(3));
+    		}
     	}else
     	{ //if pawn promotion | col1,col2,capturedPiece,newPiece,P	
     		chessBoard[1][Character.getNumericValue(move.charAt(0))]=" "; //it must go from row 1 to row 0
@@ -80,6 +105,11 @@ public class AlphaBetaChess
     	{ //x1,y1,x2,y2,captured piece
     		chessBoard[Character.getNumericValue(move.charAt(0))][Character.getNumericValue(move.charAt(1))]=chessBoard[Character.getNumericValue(move.charAt(2))][Character.getNumericValue(move.charAt(3))];
     		chessBoard[Character.getNumericValue(move.charAt(2))][Character.getNumericValue(move.charAt(3))]=String.valueOf(move.charAt(4));
+    		
+    		if("A".equals(chessBoard[Character.getNumericValue(move.charAt(0))][Character.getNumericValue(move.charAt(1))]))
+    		{ //undoing the kingPosition after it has been moved (if it has been moved)
+    			kingPositionC=8*Character.getNumericValue(move.charAt(0)) + Character.getNumericValue(move.charAt(1));
+    		}
     		
     	}else
     	{ //if pawn promotion | col1,col2,capturedPiece,newPiece,P	
@@ -559,11 +589,12 @@ public class AlphaBetaChess
 		f.setVisible(true);
 	*/
 		System.out.println(possibleMoves());
+		makeMove(alphaBeta(globalDepth, 1000000, -1000000, "", 0));
 			
 		//makeMove("7657 ");
 		//undoMove("7657 ");		
-		//for(int i=0; i<8; i++)
-		//	System.out.println(Arrays.toString(chessBoard[i]));
+		for(int i=0; i<8; i++)
+			System.out.println(Arrays.toString(chessBoard[i]));
 		
 		
 	}
