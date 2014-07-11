@@ -17,7 +17,7 @@ public class UserInterface extends JPanel implements MouseListener, MouseMotionL
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-		this.setBackground(Color.YELLOW);
+		this.setBackground(new Color(245, 245, 220));
 		
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);		
@@ -76,10 +76,41 @@ public class UserInterface extends JPanel implements MouseListener, MouseMotionL
 	}
 	@Override
 	public void mousePressed(MouseEvent e) 
-	{}
+	{
+		if(e.getX()<8*squareSize && e.getY()<8*squareSize)
+		{//if inside board
+			mouseX = e.getX();
+			mouseY = e.getY();
+			repaint();
+		}
+	}
 	@Override
 	public void mouseReleased(MouseEvent e) 
-	{}	
+	{
+		if(e.getX()<8*squareSize && e.getY()<8*squareSize)
+		{//if inside board
+			newMouseX = e.getX();
+			newMouseY = e.getY();
+			if(e.getButton() == MouseEvent.BUTTON1)
+			{
+				String dragMove;
+				if(newMouseY/squareSize == 0 && mouseY/squareSize == 1 && "P".equals(AlphaBetaChess.chessBoard[mouseY/squareSize][mouseX/squareSize]))
+				{//if pawn promotion
+					dragMove = "" + mouseX/squareSize + newMouseX/squareSize + AlphaBetaChess.chessBoard[newMouseY/squareSize][newMouseX/squareSize]+"QP";	
+				}else{//regular move
+					dragMove = "" + mouseY/squareSize + mouseX/squareSize + newMouseY/squareSize + newMouseX/squareSize + AlphaBetaChess.chessBoard[newMouseY/squareSize][newMouseX/squareSize];						
+				} 	
+				
+				String userPossibleMoves=AlphaBetaChess.possibleMoves();
+				if(userPossibleMoves.replaceAll(dragMove, "").length()<userPossibleMoves.length())
+				{//if valid move
+					AlphaBetaChess.makeMove(dragMove);
+				}
+			}
+			
+			repaint();
+		}
+	}	
 	@Override
 	public void mouseClicked(MouseEvent e) 
 	{}	
