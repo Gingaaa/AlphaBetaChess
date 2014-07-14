@@ -71,14 +71,14 @@ public class Rating
 		
 		counter+=rateAttack();
 		counter+=material;
-		counter+=rateMoveability();
+		counter+=rateMoveability(list, depth, material);
 		counter+=ratePositional(material);
 		AlphaBetaChess.flipBoard();
 		
 		material=rateMaterial();
 		counter-=rateAttack();
 		counter-=material;
-		counter-=rateMoveability();
+		counter-=rateMoveability(list, depth, material);
 		counter-=ratePositional(material);
 		AlphaBetaChess.flipBoard();
 				
@@ -121,9 +121,20 @@ public class Rating
 		return counter;
 	}
 	
-	public static int rateMoveability()
+	public static int rateMoveability(int listLength, int depth, int material)
 	{
-		return 0;
+		int counter=0;
+		counter+=listLength;//5 points per valid move
+		if(listLength==0)
+		{//either in checkmate or stalemate
+			if(!AlphaBetaChess.kingSafe())
+			{//if checkmate
+				counter+= -200000*depth;
+			}else{//if stalemate
+				counter+= -150000*depth;
+			}
+		}
+		return counter;
 	}
 	
 	public static int ratePositional(int material) //use material to decide whether it is in early/mid/lategame
