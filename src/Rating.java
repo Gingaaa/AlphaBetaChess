@@ -87,7 +87,29 @@ public class Rating
 	
 	public static int rateAttack()
 	{
-		return 0;
+		int counter = 0;
+		int tempPositionC=AlphaBetaChess.kingPositionC;
+		
+		for(int i=0; i<64; i++)
+		{
+			switch(AlphaBetaChess.chessBoard[i/8][i%8])
+			{
+				case "P": {AlphaBetaChess.kingPositionC=i; if(!AlphaBetaChess.kingSafe()) {counter-=64;}} //pretends the curr piece is the king to check if it is under attack
+					break;
+				case "R": {AlphaBetaChess.kingPositionC=i; if(!AlphaBetaChess.kingSafe()) {counter-=500;}}
+					break;
+				case "K": {AlphaBetaChess.kingPositionC=i; if(!AlphaBetaChess.kingSafe()) {counter-=300;}}
+					break;
+				case "B": {AlphaBetaChess.kingPositionC=i; if(!AlphaBetaChess.kingSafe()) {counter-=300;}}
+					break;
+				case "Q": {AlphaBetaChess.kingPositionC=i; if(!AlphaBetaChess.kingSafe()) {counter-=900;}}
+					break;
+		
+			}
+		}
+		AlphaBetaChess.kingPositionC = tempPositionC;
+		if(!AlphaBetaChess.kingSafe()) {counter-=200;}
+		return counter/2; //attacking is not as good as destroying
 	}
 	
 	public static int rateMaterial()
@@ -96,7 +118,7 @@ public class Rating
 				
 		for(int i=0; i<64; i++)
 		{
-			switch(AlphaBetaChess.chessBoard[1/8][i%8])
+			switch(AlphaBetaChess.chessBoard[i/8][i%8])
 			{
 				case "P": counter += 100;
 					break;
