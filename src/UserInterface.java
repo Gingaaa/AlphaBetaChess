@@ -4,6 +4,10 @@ import javax.swing.*;
 
 public class UserInterface extends JPanel implements MouseListener, MouseMotionListener
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	static int mouseX, mouseY, newMouseX, newMouseY;
 	static int squareSize=32;
 	

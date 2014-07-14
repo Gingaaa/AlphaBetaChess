@@ -31,7 +31,7 @@ public class AlphaBetaChess
     	 * 	list+="1111b";
     	 * }   	
     	*/
-    	//sort later
+    	list=sortMoves(list);
     	player=1-player; //either 1 or 0
     	for(int i=0; i<list.length(); i+=5) //skips ahead one move
     	{
@@ -452,7 +452,36 @@ public class AlphaBetaChess
 		//need to add castling later
 		return list;
 	}
+	
+	public static String sortMoves(String list)
+	{
+		int [] score = new int[list.length()/5];
+		for(int i=0; i<list.length(); i+=5)
+		{
+			makeMove(list.substring(i, i+5));
+			score[i/5]= -Rating.rating(-1, 0);
+			undoMove(list.substring(i, i+5));
+		}
+		String newListA="", newListB=list;
+		for(int i=0; i<Math.min(6, list.length()/5); i++)
+		{//find the 5 best moves
+			int max = -1000000, maxLocation=0;
+			for(int j=0; j<list.length()/5; j++)
+			{
+				if(score[j]>max)
+				{
+					max = score[j];
+					maxLocation = j;
+				}
+			}
+			score[maxLocation] = -1000000;
+			newListA += list.substring(maxLocation*5, maxLocation*5+5);
+			newListB = newListB.replace(list.substring(maxLocation*5, maxLocation*5+5), "");
+		}
 		
+		return newListA + newListB;
+	}
+	
 	public static boolean kingSafe() //is the position the king will move into a safe position?
 	{
 		//bishop/queen
@@ -588,7 +617,10 @@ public class AlphaBetaChess
 				JOptionPane.QUESTION_MESSAGE, null, option, option[1]);
 		if(humanAsWhite==0)
 		{
+			long startTime = System.currentTimeMillis();
 			makeMove(alphaBeta(globalDepth, 1000000, -1000000, "", 0));
+			long endTime = System.currentTimeMillis();
+			System.out.println("That move took " + (endTime - startTime) + " milliseconds");
 			flipBoard();
 			f.repaint();
 		}
