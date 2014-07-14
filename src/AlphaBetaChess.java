@@ -20,7 +20,7 @@ public class AlphaBetaChess
     	//String list="1"; For debugging
     	String list = possibleMoves();
     	
-    	if (depth==0 || list.length()==0) {return move+(rating()*(player*2-1));} //makes the rating negative if it is the opposing player's move or positive if it is the engines
+    	if (depth==0 || list.length()==0) {return move+(Rating.rating(list.length(), depth)*(player*2-1));} //makes the rating negative if it is the opposing player's move or positive if it is the engines
     	/* For debugging
     	 * list="";
     	 * System.out.print("How many moves are there: ");
@@ -452,17 +452,7 @@ public class AlphaBetaChess
 		//need to add castling later
 		return list;
 	}
-	
-	public static int rating()
-	{
-		/* For debugging
-		 * System.out.print("What is the score: ");
-		 * Scanner sc = new Scanner(System.in);
-		 * return sc.nextInt();
-		*/
-		return 0;
-	}
-	
+		
 	public static boolean kingSafe() //is the position the king will move into a safe position?
 	{
 		//bishop/queen
