@@ -1,12 +1,6 @@
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
 public class UserInterface extends JPanel implements MouseListener, MouseMotionListener
 {
@@ -105,10 +99,12 @@ public class UserInterface extends JPanel implements MouseListener, MouseMotionL
 				if(userPossibleMoves.replaceAll(dragMove, "").length()<userPossibleMoves.length())
 				{//if valid move
 					AlphaBetaChess.makeMove(dragMove);
+					AlphaBetaChess.flipBoard();
+					AlphaBetaChess.makeMove(AlphaBetaChess.alphaBeta(AlphaBetaChess.globalDepth, 1000000, -1000000, "", 0));
+					AlphaBetaChess.flipBoard();
+					repaint();
 				}
 			}
-			
-			repaint();
 		}
 	}	
 	@Override

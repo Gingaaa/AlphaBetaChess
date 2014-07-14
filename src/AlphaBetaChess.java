@@ -59,7 +59,7 @@ public class AlphaBetaChess
     public static void flipBoard()
     {	//swap index i with index j then i+1 with j-1 and so on. Also need to change to swap the case so the move methods function correctly. Only go through half or will end up in original position
     	String temp;
-    	for(int i=0; i>32; i++)
+    	for(int i=0; i<32; i++)
     	{
     		int r=i/8, c=i%8; //row/column
     		
@@ -576,6 +576,7 @@ public class AlphaBetaChess
 	}
 	
 	static int kingPositionC,kingPositionL; //capital, lowercase
+	static int humanAsWhite=-1;//1 = human as white, 0 = human as black
 	static int globalDepth = 4;
 	
 	public static void main(String[] args) 
@@ -591,7 +592,16 @@ public class AlphaBetaChess
 		f.setVisible(true);
 		
 		System.out.println(possibleMoves());
-		makeMove(alphaBeta(globalDepth, 1000000, -1000000, "", 0));
+		
+		Object[] option = {"Computer", "Human"};
+		humanAsWhite = JOptionPane.showOptionDialog(null, "Who should play as white?", "ABC Options", JOptionPane.YES_NO_OPTION, 
+				JOptionPane.QUESTION_MESSAGE, null, option, option[1]);
+		if(humanAsWhite==0)
+		{
+			makeMove(alphaBeta(globalDepth, 1000000, -1000000, "", 0));
+			flipBoard();
+			f.repaint();
+		}
 			
 		//makeMove("7657 ");
 		//undoMove("7657 ");		
